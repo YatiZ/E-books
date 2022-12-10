@@ -1,0 +1,9 @@
+{% extends 'librarian/style.html' %} 
+{% block content %} 
+  <h1>Edit page</h1>
+<form method="POST" action="" enctype="multipart/form-data">
+    {% csrf_token %}
+  {{books.as_p}}
+  <button type="submit">Done</button>
+</form>
+{% endblock %}

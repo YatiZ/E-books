@@ -1,0 +1,41 @@
+{% extends 'user/style.html' %} 
+{% block content %} 
+
+
+
+<p>Viewer{{num_visits}}</p>
+
+
+
+<div class="wrapper">
+   
+    <div class="cols">
+        {% for i in books %}
+              <div class="col" ontouchstart="this.classList.toggle('hover');">
+                <div class="book_container">
+                      <div class="front" style="background-image: url(i.book_cover)">
+                          <div class="inner">
+                              <img src="{{i.book_cover.url}}" style="width:10rem;padding-top: 10px;height: 15rem;">
+                          </div>
+                      </div>
+                      <div class="back">
+                          <div class="inner" style="padding-top: 0px;">
+                            <h4>{{i.book_name}}</h4><br>
+                            <p style="font-size: 15px;">Released Date: {{i.date}}</p>
+                            <h6>Type: {{i.book_types}}</h6> <br>
+                            <h6>Written By: {{i.author}}</h6><br>
+                            <a href="{{i.book_pdf.url}}">Read <i class="fa-solid fa-book-open-reader"></i></a><br>
+                             <a href="{{i.book_pdf.url}}" download>Download <i class="fa-solid fa-download"></i></a>
+                          </div>
+                      </div>
+                  </div>
+                  
+                </div>
+            {% endfor %}           
+    </div>
+    
+          
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,189 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Admin Dashboard</title>
+
+    <!-- Montserrat Font -->
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet"> -->
+
+    <!-- Material Icons -->
+    <script src="https://kit.fontawesome.com/9dca7ae98e.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <script src="https://cdn.lordicon.com/fudrjiwc.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static "style.css" %}">
+  </head>
+  <body>
+    <div class="grid-container">
+
+      
+      <!-- Sidebar -->
+      <aside id="sidebar">
+        <div class="sidebar-title">
+          <div class="sidebar-brand">
+            <i class="fa-solid fa-chart-line">Librarian <br> Dashboard</i> 
+          </div>
+          <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
+        </div>
+
+        <ul class="sidebar-list">
+          <li class="sidebar-list-item"><a href="{% url 'index_lib' %}">Dashboard<lord-icon src="https://cdn.lordicon.com/kxoxiwrf.json" trigger="hover" style="width:50px;height:50px" href="#"></lord-icon></a>
+            
+          </li>
+          <li class="sidebar-list-item"> <a href="{% url 'home' %}">All Books<lord-icon
+            src="https://cdn.lordicon.com/lpvkqfxb.json"
+            trigger="morph"
+            style="width:50px;height:50px">
+        </lord-icon></a>
+           
+          </li>
+          <li class="sidebar-list-item">
+            <a href="{% url 'addbook' %}">Add Book<lord-icon
+                src="https://cdn.lordicon.com/zgogqkqu.json"
+                trigger="hover"
+                style="width:50px;height:50px" >
+            </lord-icon></a>
+          </li>
+          <!-- <li class="sidebar-list-item"> 
+            <span class="material-icons-outlined">add_shopping_cart</span> Purchase Orders
+          </li> -->
+          <li class="sidebar-list-item">
+        Consultation<lord-icon
+    src="https://cdn.lordicon.com/mjmrmyzg.json"
+    trigger="hover"
+    style="width:50px;height:50px">
+</lord-icon>
+          </li>
+          <li class="sidebar-list-item">
+            Settings<lord-icon
+    src="https://cdn.lordicon.com/tsnvgrkp.json"
+    trigger="hover"
+    style="width:50px;height:50px">
+</lord-icon>
+          </li>
+        </ul>
+      </aside>
+      <!-- End Sidebar -->
+
+{% block content %}
+<!-- Header -->
+<header class="header">
+  <div class="menu-icon" onclick="openSidebar()">
+    <span class="material-icons-outlined">menu</span>
+  </div>
+ 
+  <div class="header-left">
+  <form>
+      <input type="text" placeholder="search..." style="width: 300px;height:30px">
+      <button type="submit">Search</button>
+
+  </form>
+  </div>
+  
+  <div class="header-right">
+      <lord-icon
+      src="https://cdn.lordicon.com/dfxesbyu.json"
+      trigger="hover"
+      style="width:45px;height:45px">
+  </lord-icon>
+    <a href="mailto:zuzu62113@gmail.com?Subject=Some%20subject"><lord-icon
+      src="https://cdn.lordicon.com/sdhhsgeg.json"
+      trigger="hover"
+      style="width:50px;height:50px">
+      </lord-icon></a>
+<lord-icon
+src="https://cdn.lordicon.com/byqzpnik.json"
+trigger="hover"
+style="width:50px;height:50px">
+</lord-icon>
+  </div>
+</header>
+<!-- End Header -->
+
+
+<!-- Main -->
+      <main class="main-container">
+        <div class="main-title">
+          <p class="font-weight-bold">DASHBOARD</p>
+        </div>
+
+        <div class="main-cards">
+
+          <div class="card">
+            <div class="card-inner">
+              <p class="text-primary">TOTAL BOOKS</p>
+              <lord-icon
+    src="https://cdn.lordicon.com/hursldrn.json"
+    trigger="morph"
+    style="width:80px;height:80px">
+</lord-icon>
+            </div>
+            <span class="text-primary font-weight-bold">249</span>
+          </div>
+
+          <div class="card">
+            <div class="card-inner">
+              <p class="text-primary">FREE CUSTOMERS</p>
+              <lord-icon
+    src="https://cdn.lordicon.com/ljvjsnvh.json"
+    trigger="hover"
+    style="width:70px;height:70px">
+</lord-icon>
+            </div>
+            <span class="text-primary font-weight-bold">83</span>
+          </div>
+
+          <div class="card">
+            <div class="card-inner">
+              <p class="text-primary">VIP MEMBERS</p>
+              <lord-icon
+    src="https://cdn.lordicon.com/xhsumrcb.json"
+    trigger="hover"
+    style="width:80px;height:80px">
+</lord-icon>
+            </div>
+            <span class="text-primary font-weight-bold">79</span>
+          </div>
+
+          <div class="card">
+            <div class="card-inner">
+              <p class="text-primary">INVENTORY ALERTS</p>
+              <lord-icon
+    src="https://cdn.lordicon.com/wbfqtbhv.json"
+    trigger="hover"
+    style="width:80px;height:80px">
+</lord-icon>
+            </div>
+            <span class="text-primary font-weight-bold">56</span>
+          </div>
+
+        </div>
+
+        <div class="charts">
+
+          <div class="charts-card">
+            <p class="chart-title">Top 5 Book Types</p>
+            <div id="bar-chart"></div>
+          </div>
+
+          <div class="charts-card">
+            <p class="chart-title">Purchase and Sales Orders</p>
+            <div id="area-chart"></div>
+          </div>
+
+        </div>
+      </main>
+      <!-- End Main -->
+{% endblock %}
+    </div>
+
+    <!-- Scripts -->
+    <!-- ApexCharts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.3/apexcharts.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{% static "lib.js" %}"></script>
+  </body>
+</html>

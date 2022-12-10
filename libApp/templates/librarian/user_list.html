@@ -1,0 +1,11 @@
+{% extends 'librarian/style.html' %} 
+{% block content %} 
+<h1>This is user lists</h1>
+<ol>
+{% for list in lists %} 
+
+    <li>{{list.name}}</li>
+
+{% endfor %}
+</ol>
+{% endblock %}

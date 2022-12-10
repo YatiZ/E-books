@@ -1,0 +1,25 @@
+{% extends 'librarian/index.html' %} 
+{% block content %} 
+<form method="POST" action="" enctype="multipart/form-data">
+    {% csrf_token %} 
+    <label for="book_name">Book Name:</label>
+    <input type="text" name="book_name"><br>
+    <label for="author">Author:</label>
+    <input type="text" name="author"><br>
+    <label for="book_types">Choose Book Catergory:</label>
+            <select name="book_types">
+            <option value="education">education</option>
+            <option value="mangas">mangas</option>
+            <option value="mm_books">mm_books</option>
+            <option value="history">history</option>
+            <option value="health">health</option>
+            <option value="novel">novel</option>
+            </select><br>
+    <label for="cover">Book Cover:</label>
+    <input type="file" name="cover"><br>
+    <label for="pdf">Book PDF:</label>
+    <input type="file" name="pdf">
+    <button type="submit">Done</button>
+
+</form>
+{% endblock %}

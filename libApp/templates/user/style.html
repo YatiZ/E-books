@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'user.css' %}">
+    <script src="https://kit.fontawesome.com/9dca7ae98e.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Document</title>
+</head>
+<body>
+    <input type="checkbox" id="check" class="hide">
+    <div class="container">
+        <label for="check">
+            <i class="fas fa-angle-left" id="arrow"></i>
+        </label>
+        <div class="imgbox"><img src="{% static 'logo.png' %}" alt=""></div>
+        <ol class="navbar">
+           <li class="searchbox"><i class="fas fa-search"><input type="text" placeholder="Search.."></i></li>
+           <li><a href="{% url 'user_home' %}"><i class="fas fa-tv"></i><p>All Books</p></a><span>All Books</span></li>
+           <li><a href="{% url 'all-book' %}"><i class="far fa-user"></i><p>Your Library</p></a><span>All Books</span></li>
+           <li><a href="#"><i class="far fa-folder"></i><p>Favorite Book</p></a><span>Favorite Book</span></li>
+           <li><a href="#"><i class="fas fa-tv"></i><p>Downloaded Book</p></a><span>Downloaded Book</span></li>
+           <li><a href="#"><i class="fas fa-tv"></i><p>Note</p></a><span>Note</span></li>
+           <li><a href="#"><i class="fas fa-tv"></i><p>Contact</p></a><span>Contact</span></li>
+           <li><a href="#"><i class="fas fa-tv"></i><p>Setting</p></a><span>Setting</span></li>
+        </ol>
+        <div class="social">
+            <i class="fab fa-facebook"></i>
+            <i class="fab fa-linkedin"></i>
+            <i class="fab fa-twitter"></i>
+        </div>
+    </div>
+    <section>
+        
+    </section>
+    {% block content %} 
+    
+    {% endblock %}
+</body>
+</html>

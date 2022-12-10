@@ -1,0 +1,14 @@
+{% extends 'librarian/index.html' %} 
+{% block content %} 
+{% for i in books %} 
+<h3>{{i.book_name}}</h3>
+<h4>{{i.book_types}}</h4>
+<p>written by {{i.author}}</p>
+<span>{{i.date}}</span>
+<img src="{{i.book_cover.url}}" width="200">
+<a href="{{i.book_pdf.url}}">Read Book</a>
+<a href="/delete/{{i.book_id}}">Delete</a>
+<a href="/update/{{i.book_id}}">Update</a>
+<!-- <a href="{% url 'update' i.book_id %}">Edit Book</a> -->
+{% endfor %}
+{% endblock %}
