@@ -17,12 +17,13 @@ from django.template.loader import render_to_string
 # Create your views here.
 
 #Registration
-# def login(request):
-#     return render(request,'account/login.html')
+def login(request):
+    return render(request,'account/login.html')
+
 def profile(request):
     user = User.objects.get(username = request.user)
     books = Book.objects.all()
-    return render(request,'account/profile.html',{'user':user,'book':books})
+    return render(request,'user/home.html',{'user':user,'books':books})
 
 def register(request):
     if request.method == 'POST':
@@ -49,16 +50,6 @@ def register(request):
             messages.success(request,'Account successfully created')
             return render(request,'account/register.html')
 
-            # current_site =get_current_site(request)
-            # subject = 'Activate Your Account'
-            # message = render_to_string('account/activation_email.html',{
-            #     'user': user,
-            #     'domain':current_site.domain,
-            #     'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-            #     'token': account_activation_token.make_token(user),
-            # })
-            # user.email_user(subject=subject, message = message)
-            # return HttpResponse('registered successfully and activation sent')
     else:
         form = RegistrationForm()
     return render(request,'account/register.html',{'form':form})
@@ -80,13 +71,13 @@ def index(request):
         return redirect('home')
     return render(request,'user/index.html')
 
-def user_home(request):
-    user = Person.objects.all()
-    books = Book.objects.all()
-    # num_visits = request.session.get('num_visits',0)
-    # request.session['num_visits'] = num_visits + 1
+# def user_home(request):
+#     user = Person.objects.all()
+#     books = Book.objects.all()
+#     # num_visits = request.session.get('num_visits',0)
+#     # request.session['num_visits'] = num_visits + 1
 
-    return render(request,'user/home.html',{'user':user,'books':books})
+#     return render(request,'user/home.html',{'user':user,'books':books})
 
 
 

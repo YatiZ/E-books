@@ -15,7 +15,7 @@ urlpatterns = [
 
     #user
     path('index/',views.index,name='index'),
-    path('user_home/',views.user_home,name='user_home'),
+    # path('user_home/',views.user_home,name='user_home'),
     path('user_style',views.user_style,name='user_style'),
     path('all-book',views.all_book,name='all-book'),
 
