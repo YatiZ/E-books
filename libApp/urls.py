@@ -1,7 +1,18 @@
 from django.urls import path
 from .import views
+from .views import VerificationView 
+from django.contrib.auth import views as auth_views
+from.forms import UserLoginForm
 
 urlpatterns = [ 
+    #account
+    # path('e-book',views.login,name= 'e-book'),
+    path('login',auth_views.LoginView.as_view( template_name = "account/login.html", authentication_form = UserLoginForm),name = 'login'),
+    path('accounts/profile/',views.profile,name='profile'),
+    path('logout',auth_views.LogoutView.as_view(template_name = 'account/logout.html'),name ='logout'),
+    path('register/',views.register,name = 'register'),
+    path('activate/<uidb64>/<token>',VerificationView.as_view(),name= 'activate'),
+
     #user
     path('index/',views.index,name='index'),
     path('user_home/',views.user_home,name='user_home'),

@@ -1,7 +1,71 @@
 from django.shortcuts import render,redirect,HttpResponse
+from django.contrib.sites.shortcuts import get_current_site
 from .models import Person,Book
-from .forms import book_form
+from django.views import View
+from django.contrib.auth.models import User
+from .forms import book_form,RegistrationForm
+from django.core.mail import EmailMessage
+from django.contrib import messages
+from django.core.mail import send_mail
+from django.urls import reverse
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes,  DjangoUnicodeDecodeError
+from django.contrib.sites.shortcuts import get_current_site
+from .utils import token_generator
+
+from django.template.loader import render_to_string
 # Create your views here.
+
+#Registration
+# def login(request):
+#     return render(request,'account/login.html')
+def profile(request):
+    user = User.objects.get(username = request.user)
+    books = Book.objects.all()
+    return render(request,'account/profile.html',{'user':user,'book':books})
+
+def register(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.email = form.clean_username['email']
+            user.set_password(form.cleaned_data['password'])
+            user.is_active = False
+            user.save()
+            email_subject = 'Activate your account'
+            uidb64 = force_bytes(urlsafe_base64_encode(user.pk))
+            domain = get_current_site(request).domain
+            link = reverse('activate',kwargs = {'uidb64':uidb64,'token':token_generator.make_token(user)})
+            activate_url = 'http://'+domain+link
+            email_body = 'Hi' + user.username+ 'please use this link to verify your account\n'+activate_url
+            email = EmailMessage(
+                email_subject,
+                email_body,
+                'noreply@semycolon.com'
+                [email],
+            )
+            email.send(fail_silently= False)
+            messages.success(request,'Account successfully created')
+            return render(request,'account/register.html')
+
+            # current_site =get_current_site(request)
+            # subject = 'Activate Your Account'
+            # message = render_to_string('account/activation_email.html',{
+            #     'user': user,
+            #     'domain':current_site.domain,
+            #     'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+            #     'token': account_activation_token.make_token(user),
+            # })
+            # user.email_user(subject=subject, message = message)
+            # return HttpResponse('registered successfully and activation sent')
+    else:
+        form = RegistrationForm()
+    return render(request,'account/register.html',{'form':form})
+
+class VerificationView(View):
+    def get(self,request,uidb64,token):
+        return redirect('login')
 
 #User Views
 def user_style(request):
