@@ -18,26 +18,23 @@
         </label>
         <div class="imgbox"><img src="{% static 'logo.png' %}" alt=""></div>
         <ol class="navbar">
-           <li class="searchbox"><i class="fas fa-search"><input type="text" placeholder="Search.."></i></li>
-           <li><a href="{% url 'profile' %}"><i class="fas fa-tv"></i><p>All Books</p></a><span>All Books</span></li>
+            
+           <li><a href=""><img src="{% static 'profile.gif' %}" alt="profile" style="width:38px;height:38px;"><p style="margin-top:10px;">{{user.username}}</p></a><span>{{user.username}}</span></li>
+           <li><a href=""><i class="fas fa-tv"></i><p>All Books</p></a><span>All Books</span></li>
            <li><a href="{% url 'all-book' %}"><i class="far fa-user"></i><p>Your Library</p></a><span>All Books</span></li>
            <li><a href="#"><i class="far fa-folder"></i><p>Favorite Book</p></a><span>Favorite Book</span></li>
            <li><a href="#"><i class="fas fa-tv"></i><p>Downloaded Book</p></a><span>Downloaded Book</span></li>
-           <li><a href="#"><i class="fas fa-tv"></i><p>Note</p></a><span>Note</span></li>
            <li><a href="#"><i class="fas fa-tv"></i><p>Contact</p></a><span>Contact</span></li>
-           <li><a href="#"><i class="fas fa-tv"></i><p>Setting</p></a><span>Setting</span></li>
+           <li><a href="{% url 'setting' %}"><i class="fas fa-tv"></i><p>Setting</p></a><span>Setting</span></li>
+           <li><a href="{% url 'logout' %}"><img src="{% static 'exit.png' %}" alt="exit" style="width:48px;height:48px;"><p style="margin-top:10px;">Logout</p></a><span>Logout</span></li>
         </ol>
-        <div class="social">
-            <i class="fab fa-facebook"></i>
-            <i class="fab fa-linkedin"></i>
-            <i class="fab fa-twitter"></i>
-        </div>
-    </div>
-    <section>
-        
-    </section>
-    {% block content %} 
     
+        
+        
+    </div>
+    {% block content %} 
     {% endblock %}
+    
+    
 </body>
 </html>

@@ -1,66 +1,106 @@
-from django.shortcuts import render,redirect,HttpResponse
+from django.shortcuts import render,redirect,HttpResponse,HttpResponseRedirect
 from django.contrib.sites.shortcuts import get_current_site
 from .models import Person,Book
 from django.views import View
 from django.contrib.auth.models import User
+from django.contrib.auth import login
 from .forms import book_form,RegistrationForm
 from django.core.mail import EmailMessage
-from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages,auth
 from django.core.mail import send_mail
 from django.urls import reverse
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes,  DjangoUnicodeDecodeError
 from django.contrib.sites.shortcuts import get_current_site
 from .utils import token_generator
-
+from django.contrib.auth import authenticate,logout
 from django.template.loader import render_to_string
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 # Create your views here.
 
 #Registration
-def login(request):
+# def login_form(request):
+#     return render(request,'account/login.html')
+
+def loginView(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username = username, password = password)
+        if user is not None and user.is_active:
+            auth.login(request, user)
+            if user.is_staff:
+                return redirect('home')
+            else:
+                return redirect('/profile/'+username)
+        return redirect('/profile/'+username)
     return render(request,'account/login.html')
 
-def profile(request):
-    user = User.objects.get(username = request.user)
+
+def logoutView(request):
+    logout(request)
+    return redirect('login')
+
+def profile(request,pk):
+    user = User.objects.get(username = pk)
     books = Book.objects.all()
-    return render(request,'user/home.html',{'user':user,'books':books})
+    return render(request,'user/home.html',{'books':books,'user':user})
 
 def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.email = form.clean_username['email']
-            user.set_password(form.cleaned_data['password'])
-            user.is_active = False
-            user.save()
-            email_subject = 'Activate your account'
-            uidb64 = force_bytes(urlsafe_base64_encode(user.pk))
-            domain = get_current_site(request).domain
-            link = reverse('activate',kwargs = {'uidb64':uidb64,'token':token_generator.make_token(user)})
-            activate_url = 'http://'+domain+link
-            email_body = 'Hi' + user.username+ 'please use this link to verify your account\n'+activate_url
-            email = EmailMessage(
-                email_subject,
-                email_body,
-                'noreply@semycolon.com'
-                [email],
-            )
-            email.send(fail_silently= False)
-            messages.success(request,'Account successfully created')
-            return render(request,'account/register.html')
-
+            user = form.save()
+            login(request,user)
+            messages.success(request,'Account was created successfully')
+            return redirect('profile')
     else:
         form = RegistrationForm()
+        
     return render(request,'account/register.html',{'form':form})
+
+def create_acc(request):
+    return render(request,'account/create_acc.html')
+
+# def register(request):
+#     if request.method == 'POST':
+#         form = RegistrationForm(request.POST)
+#         if form.is_valid():
+#             user = form.save(commit=False)
+#             user.email = form.clean_username['email']
+#             user.set_password(form.cleaned_data['password'])
+#             user.is_active = False
+#             user.save()
+#             email_subject = 'Activate your account'
+#             uidb64 = force_bytes(urlsafe_base64_encode(user.pk))
+#             domain = get_current_site(request).domain
+#             link = reverse('activate',kwargs = {'uidb64':uidb64,'token':token_generator.make_token(user)})
+#             activate_url = 'http://'+domain+link
+#             email_body = 'Hi' + user.username+ 'please use this link to verify your account\n'+activate_url
+#             email = EmailMessage(
+#                 email_subject,
+#                 email_body,
+#                 'noreply@semycolon.com'
+#                 [email],
+#             )
+#             email.send(fail_silently= False)
+#             messages.success(request,'Account successfully created')
+#             return render(request,'account/register.html')
+
+#     else:
+#         form = RegistrationForm()
+#     return render(request,'account/register.html',{'form':form})
 
 class VerificationView(View):
     def get(self,request,uidb64,token):
         return redirect('login')
 
 #User Views
-def user_style(request):
-    return render(request,'user/style.html')
+def user_style(request,pk):
+    user = User.objects.get(username = pk)
+    return render(request,'user/style.html',{'user':user})
 
 def index(request):
     if request.method == 'POST':
@@ -80,6 +120,9 @@ def index(request):
 #     return render(request,'user/home.html',{'user':user,'books':books})
 
 
+def setting(request):
+    user = User.objects.all()
+    return render(request,'user/setting.html',{'user':user})
 
 #Librarian View
 def add_book(request):
@@ -117,12 +160,20 @@ def home(request):
 
 def user_list(request):
     lists = Person.objects.all()
-    return render(request,'librarian/user_list.html',{'lists':lists})
+    users = User.objects.all()
+    return render(request,'librarian/user_list.html',{'lists':lists,'users':users})
 
 def index_lib(request):
-    return render(request,'librarian/index.html')
+    book = Book.objects.all()
+    total_book = len(book)
+    users = User.objects.all()
+    total_user = len(users)
+    return render(request,'librarian/index.html',{'book':book,'total_book':total_book,'total_user':total_user})
 
 def all_book(request):
+    return HttpResponse('hello')
+    user = User.objects.get(username =request.user.username)
+    
     books = Book.objects.all()
     return render(request,'user/all_book.html',{'books':books})
 

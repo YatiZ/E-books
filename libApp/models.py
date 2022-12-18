@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 class Person(models.Model):
@@ -42,7 +42,12 @@ class Post(models.Model):
     title = models.CharField(max_length=100,unique=True)
     num_visits = models.IntegerField(default=0)
 
+class User(AbstractUser):
+    is_admin = models.BooleanField(default=False)
+    is_user = models.BooleanField(default=False)
 
+    class Meta:
+        swappable = 'AUTH_USER_MODEL'
 
     
 
