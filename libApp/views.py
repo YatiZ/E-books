@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect,HttpResponse,HttpResponseRedirect
+from django.shortcuts import render,redirect,HttpResponse,HttpResponseRedirect,get_object_or_404
 from django.contrib.sites.shortcuts import get_current_site
 from .models import Person,Book
 from django.views import View
@@ -18,6 +18,10 @@ from django.contrib.auth import authenticate,logout
 from django.template.loader import render_to_string
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from .serializer import BookSerializer
+from rest_framework import generics
 # Create your views here.
 
 #Registration
@@ -177,4 +181,47 @@ def all_book(request):
     books = Book.objects.all()
     return render(request,'user/all_book.html',{'books':books})
 
+@api_view(['GET','POST'])
+def book(request,pk=None,*args,**kwargs ):
+    method = request.method
+    if method == "GET":
+        if pk is not None:
+            obj = get_object_or_404(Book,pk = pk)
+            data = BookSerializer(obj, many = False).data
+            return Response(data)
+        queryset = Book.objects.all()
+        data = BookSerializer(queryset,many=True).data
+        return Response(data)
+    
+    if method == "POST":
 
+        serializer = BookSerializer(data = request.data)
+        if serializer.is_valid(raise_exception=True):
+            return Response(serializer.data)
+        return Response({'invalid':'No good data'},status=400)
+    
+    
+class BookListView(generics.ListCreateAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+book_list_view = BookListView.as_view()
+
+@api_view(['GET'])
+def one_book(request,pk):
+    book = Book.objects.get(book_id = pk)
+    serializer = BookSerializer(book,many = False)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+def bookupdate(request,pk):
+    book = Book.objects.get(book_id=pk)
+    serializer = BookSerializer(instance=book,data = request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
+
+@api_view(['DELETE'])
+def bookdelete(request,pk):
+    book = Book.objects.get(book_id = pk)
+    book.delete()
+    return Response("Item successfully deleted!")

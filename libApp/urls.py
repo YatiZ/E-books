@@ -31,4 +31,11 @@ urlpatterns = [
     path('delete/<str:pk>',views.delete_book,name='delete'),
     path('update/<str:pk>',views.update_book,name='update'),
     path('library/',views.index_lib,name='index_lib'),
+
+    #api
+    # path('api/',views.book),
+    path('books/',views.book_list_view),
+    path('books/<int:pk>',views.one_book),
+    path('bookupdate/<int:pk>',views.bookupdate),
+    path('bookdelete/<int:pk>',views.bookdelete)
 ]
